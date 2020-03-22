@@ -4,7 +4,7 @@ nginx:
   links:
     - php
   ports:
-    - "80:80"
+    - "8088:80"
   volumes:
     - ./images/php/app/public:/var/www/html/app/public
 php:
@@ -19,6 +19,7 @@ php:
   ports:
     - "9000:9000"
   environment:
+    env_file: .env
     APP_ENV: local
     APP_DEBUG: 'true'
     APP_KEY: SomeRandomKey!!!
@@ -32,10 +33,13 @@ php:
     MEMCACHED_HOST: cache
     CACHE_DRIVER: memcached
 db:
-  image: mysql
+  image: mysql:5.7
   ports:
-    - "3306:3306"
+    - "127.0.0.1:3360:3306"
+  volumes:
+    - mysql-data:/var/lib/mysql
   environment:
+    env_file: .env
     MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     MYSQL_DATABASE: ${MYSQL_DATABASE}
     MYSQL_USER: ${MYSQL_USERNAME}
